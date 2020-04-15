@@ -140,7 +140,6 @@ export default {
     left: 10px;
     right: 10px;
     bottom: 0;
-    height: 3px;
     background-color: #fff;
 }
 .navbar-light__fix__bottom {
@@ -153,5 +152,6 @@ export default {
 }
 .navbar-light__active__line {
     background-color: #f39424;
+    height: 3px;
 }
 </style>
