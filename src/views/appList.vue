@@ -1,5 +1,5 @@
 <template>
-    <div ref="wrap" style="height: 1000px;">
+    <!-- <div ref="wrap" style="height: 1000px;">
         <navbarLight :list="titleList" @navbarClick="handleNavbarClick" v-model="active" v-if='!isError' :color='themeColor'></navbarLight>
         <bui-dropload @loading="loading" @refresh="refresh" :hasRefresh='false' :hasLoading='false' v-if='!isError'>
             <cell ref="item" v-for="(item, index) in sortList" :key="item.id">
@@ -15,6 +15,25 @@
             </cell>
             <cell style="height:400px;background-color: #fff;"></cell>
         </bui-dropload>
+        <div class="no-content flex-ac flex-jc" v-if='isShow && isError'>
+            <div class="flex-dr">
+                <bui-image src="/image/nodata.png" width="20wx" height="20wx"></bui-image>
+                <text class="f26 c51 fw4 pl15 center-height">{{i18n.ErrorLoadData}}</text>
+            </div>
+        </div>
+    </div> -->
+    <div ref="wrap" class="main">
+        <div ref="item" v-for="(item, index) in sortList" :key="item.id">
+            <div @appear="(e)=>{handleAppAppear(e,index)}" @disappear="(e)=>{handleAppDisappear(e,index)}" v-if='item.data.length != 0'>
+                <subtitle :title="item.name" margin-top="0" :color='themeColor'></subtitle>
+            </div>
+            <div class="menu__listItem" v-if='item.data.length != 0'>
+                <div class="menu__item" @click="myAllpyEvent(item)" v-for="item in item.data" :key="item.id">
+                    <bui-image class="menu__image" @click="myAllpyEvent(item)" width="60px" height="60px" :src="item.icon" resize="contain"></bui-image>
+                    <text class="menu__title" @click="myAllpyEvent(item)">{{item.name}}</text>
+                </div>
+            </div>
+        </div>
         <div class="no-content flex-ac flex-jc" v-if='isShow && isError'>
             <div class="flex-dr">
                 <bui-image src="/image/nodata.png" width="20wx" height="20wx"></bui-image>
@@ -78,6 +97,12 @@ export default {
         this.type = type
         linkapi.getThemeColor(res => {
             this.themeColor = res.background_color;
+        })
+        linkapi.getLoginInfo((user) => {
+            linkapi.startOrganUserMultiSelector(
+                { orgId: user.orgId, title: '选择', userIgnoreList: [user.userId] },
+                (res) => { this.$alert(res); },
+                (err) => { })
         })
     },
     mounted() {
@@ -178,6 +203,8 @@ export default {
                     }
                 })
                 // 将过滤出来的应用设置在当前应用的列表上
+                if(list.length != 0){
+                }
                 item.data = item.data.concat(list || [])
                 return item;
             })
@@ -279,6 +306,9 @@ export default {
 
 <style lang="css" src="../css/common.css"></style>
 <style>
+.main {
+    padding-bottom: 10px;
+}
 .menu__listItem {
     display: flex;
     flex-direction: row;
