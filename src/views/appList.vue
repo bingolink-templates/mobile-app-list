@@ -98,12 +98,6 @@ export default {
         linkapi.getThemeColor(res => {
             this.themeColor = res.background_color;
         })
-        linkapi.getLoginInfo((user) => {
-            linkapi.startOrganUserMultiSelector(
-                { orgId: user.orgId, title: '选择', userIgnoreList: [user.userId] },
-                (res) => { this.$alert(res); },
-                (err) => { })
-        })
     },
     mounted() {
         var that = this
